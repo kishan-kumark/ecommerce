@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,25 +55,6 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/admins', function () {
-    return view('admin-panal.login');
-})->name('contact');
-
-Route::get('/registers', function () {
-    return view('admin-panal.register');
-})->name('contact');
-
-
-
-
-Route::get('/dashboard', function () {
-    return view('admin-panal.dashboard');
-})->name('contact');
-
-// this is the route users
-Route::get('/user',[UserController::class,'index'])->name('admin.users');
-Route::get('/products',[ProductController::class,'index'])->name('admin.products');
-Route::get('/creates',[ProductController::class,'create'])->name('admin.creates');
 
 
 
@@ -79,3 +64,24 @@ Route::get('/creates',[ProductController::class,'create'])->name('admin.creates'
 
 
 
+
+Route::get('/register', [RegisterController::class, 'index'])->name('admin.register');
+Route::post('/register', [RegisterController::class, 'store'])->name('admin.register.store');
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/stores', [LoginController::class, 'store'])->name('login.store');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+// this is the route admin
+
+Route::middleware('auth')->group(function () {
+    Route::get('/user', [UserController::class, 'index'])->name('admin.users');
+
+    Route::post('/user', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('/products', [ProductController::class, 'index'])->name('admin.products');
+    Route::get('/creates', [ProductController::class, 'create'])->name('admin.creates');
+
+    Route::get('/dashboard', function () {
+        return view('admin-panal.dashboard');
+    })->name('dashboard');
+});

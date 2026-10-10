@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentelella Alela! | </title> 
+    <title>Gentelella Alela! | </title>
 
     <!-- Bootstrap -->
     <link href="{{asset('admin-panel/vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -32,20 +32,31 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form>
+            <form method="POST" action="{{ route('login.store') }}">
+                @csrf
               <h1>Login Form</h1>
               <div>
-                <input type="text" class="form-control" placeholder="Username" required="" />
-              </div>
-              <div>
-                <input type="password" class="form-control" placeholder="Password" required="" />
-              </div>
-              <div>
-                <a class="btn btn-default submit" href="index.html">Log in</a>
-                <a class="reset_pass" href="#">Lost your password?</a>
+                <input type="email"  value="{{ old('email') }}" name="email" class="form-control" placeholder="Username" required="" />
               </div>
 
-              <div class="clearfix"></div>
+              @error('email')
+             <span style="color: red;">{{ $message }}</span>
+                    @enderror
+
+              <div>
+                <input type="password" value="{{ old('password') }}" name="password" class="form-control" placeholder="Password" required="" />
+              </div>
+              @error('password')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+              <div>
+                       <button type="submit" class="btn btn-default submit">
+                     Login
+                     </button>
+
+              </div>
+
+              {{-- <div class="clearfix"></div>
 
               <div class="separator">
                 <p class="change_link">New to site?
@@ -59,7 +70,7 @@
                   <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
                   <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
                 </div>
-              </div>
+              </div> --}}
             </form>
           </section>
         </div>
