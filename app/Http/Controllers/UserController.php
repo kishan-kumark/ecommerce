@@ -10,7 +10,9 @@ class UserController extends Controller
 {
     //
    public function index(){
-    $users = User::all();
+      $users = User::whereNot('role', 1)->get();
+    // $users = User::all();
+
 
    return view('admin-panal.users.index', compact('users'));
 
