@@ -233,6 +233,7 @@
 
     <!-- Custom Theme Scripts -->
     <script src="{{asset('admin-panel/build/js/custom.min.js')}}"></script>
+    @stack('scripts')
 
   </body>
 </html>
