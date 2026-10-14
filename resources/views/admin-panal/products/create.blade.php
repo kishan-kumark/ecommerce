@@ -30,7 +30,8 @@
                         </div>
                         <div class="x_content">
                             <br />
-                            <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                            <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                                @csrf
 
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="title">Title <span
@@ -54,8 +55,8 @@
                                     <label for="discount_price" class="control-label col-md-3 col-sm-3 col-xs-12">Discount
                                         Price</label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input id="discount_price" class="form-control col-md-7 col-xs-12" type="text"
-                                            name="discount_price">
+                                        <input id="discount_price" class="form-control col-md-7 col-xs-12" type="number"
+                                            name="discount_price" min="0" step="0.01" required>
                                     </div>
 
                                 </div>
@@ -64,7 +65,7 @@
                                     <label for="image" class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input id="image" class="form-control col-md-7 col-xs-12" type="file"
-                                            name="image">
+                                            name="image" accept="image/*" required>
                                     </div>
 
                                 </div>
@@ -72,10 +73,10 @@
                                     <label for="category" class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         {{-- <input id="category" class="form-control col-md-7 col-xs-12" type="text" name="category"> --}}
-                                        <select name="category" id="category" class="form-control col-md-7 col-xs-12">
+                                        <select name="category_id" id="category" class="form-control col-md-7 col-xs-12">
                                             <option value="">Select Category</option>
                                             @foreach ($categories as $category)
-                                                <option style="display: none;" value="{{ $category->id }}">{{ $category->name }}</option>
+                                                <option  value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -86,10 +87,12 @@
                                     <label for="subcategory"
                                         class="control-label col-md-3 col-sm-3 col-xs-12">SubCategory</label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <select name="subcategory" id="subcategory" class="form-control col-md-7 col-xs-12">
+                                        <select name="subcategory_id" id="subcategory" class="form-control col-md-7 col-xs-12">
                                             <option value="">Select SubCategory</option>
                                             @foreach ($subCategories as $subCategory)
-                                                <option style="display: none;" value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
+                                                <option class="sub_cat_option" value="{{ $subCategory->id }}" data-category_id="{{ $subCategory->category_id }}">
+                                                    {{ $subCategory->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -129,7 +132,21 @@
     </div>
 @endsection
 @push('script')
+<script>
+    $(document).ready(function () {
+        const updateSubcategories = function () {
+            const categoryId = $('#category').val();
 
+            $('#subcategory option.sub_cat_option').each(function () {
+                const matchesCategory = $(this).data('category_id').toString() === categoryId;
+                $(this).prop('disabled', !matchesCategory).toggle(matchesCategory);
+            });
 
+            $('#subcategory').val('');
+        };
 
+        $('#category').on('change', updateSubcategories);
+        updateSubcategories();
+    });
+    </script>
 @endpush

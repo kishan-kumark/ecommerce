@@ -27,7 +27,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>User Tables</h2>
+                    <h2>Products Tables</h2>
 
                     <div class="clearfix"></div>
                   </div>
@@ -37,30 +37,50 @@
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Username</th>
+                          <th>Title</th>
+                          <th>Description</th>
+                          <th>Price</th>
+                          <th>Discount Price</th>
+
+                          <th>Image</th>
+                          <th>Category</th>
+                          <th>Sub Category</th>
                         </tr>
+
+
+
+
                       </thead>
                       <tbody>
+                        @foreach ($products as $product)
+
+
                         <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
+                            <th scope="row">{{ $product->id }}</th>
+                            <td>{{ $product->title }}</td>
+                            <td>{{ $product->description }}</td>
+                            <td>{{ $product->price }}</td>
+                            <td>{{ $product->discount_price }}</td>
+                            <td>
+    @if ($product->image)
+        <img src="{{ asset('storage/' . $product->image) }}"
+             alt="{{ $product->title }}"
+             width="100"
+             height="100"
+             style="object-fit: cover;">
+    @else
+        No Image
+    @endif
+</td>
+
+                            {{-- <td><img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->title }}" width="100"></td> --}}
+                            <td>{{ $product->category->name ?? 'N/A' }}</td>
+                            <td>{{ $product->subCategory->name ?? 'N/A' }}</td>
+
                         </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter</td>
-                        </tr>
+                        @endforeach
+
+
                       </tbody>
                     </table>
 
